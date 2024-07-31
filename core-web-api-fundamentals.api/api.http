@@ -1,0 +1,74 @@
+#@baseUrl = http://localhost:5000
+@baseUrl = https://localhost:7255
+#@accept = application/xml
+@accept = application/json
+
+# @name weatherforcast
+# @no-cookie-jar
+# @no-log
+GET {{baseUrl}}/weatherforecast
+Accept: {{accept}}
+
+> {%
+client.log('client log')
+
+ %}
+
+
+###
+# @name incorrect id city
+# @no-cookie-jar
+# @no-log
+GET {{baseUrl}}/city/2
+Accept: {{accept}}
+
+
+###
+# @name cities
+# @no-cookie-jar
+# @no-log
+GET {{baseUrl}}/city
+    ?name=some
+    &returnCustomValidationProblem=false
+    &returnNotFound=false
+    &asCsv=false
+Accept: {{accept}}
+
+###
+# @name status
+# @no-cookie-jar
+# @no-log
+GET {{baseUrl}}/status
+Accept: {{accept}}
+
+
+###
+
+# @name cities2
+# @no-cookie-jar
+# @no-log
+POST {{baseUrl}}/city
+Content-Type: application/json
+
+{
+  "name": "New nejm"
+}
+
+
+### Query tests
+# &c[]=a&c[]=b -- this is only supported by FromForm
+# &c[3]=c -- gaps are ignored!
+GET {{baseUrl}}/query
+    ?foo=bar
+    &baz=1
+    &c[0]=a
+    &c[1]=b
+    &c[3]=c
+    &d[a]=1
+    &d[a]=2
+    &d[b]=1
+    &asFile=true
+    &f[department][o]=in&f[department][v]=123
+    &o[department_name]=desc
+    &o[owner_first_name]=asc
+Content-Type: {{accept}}
