@@ -12,6 +12,7 @@
         <PackageReference Include="CsvHelper" Version="33.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.MiddlewareAnalysis" Version="8.0.7" />
         <PackageReference Include="Microsoft.Extensions.DiagnosticAdapter" Version="3.1.32" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
     </ItemGroup>
 

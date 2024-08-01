@@ -58,7 +58,7 @@ Content-Type: application/json
 ### Query tests
 # &c[]=a&c[]=b -- this is only supported by FromForm
 # &c[3]=c -- gaps are ignored!
-GET {{baseUrl}}/query
+GET {{baseUrl}}/query/standard
     ?foo=bar
     &baz=1
     &c[0]=a
@@ -71,4 +71,22 @@ GET {{baseUrl}}/query
     &f[department][o]=in&f[department][v]=123
     &o[department_name]=desc
     &o[owner_first_name]=asc
+Content-Type: {{accept}}
+
+
+### Query json tests
+GET {{baseUrl}}/query/json
+    ?foo=bar
+    &baz=1
+    &c[0]=a
+    &c[1]=b
+    &c[3]=c
+    &d[a]=1
+    &d[a]=2
+    &d[b]=1
+    &asFile=true
+    &f[department][o]=in&f[department][v]=123
+    &o[department_name]=desc
+    &o[owner_first_name]=asc
+    &filters={"filters":[{"field":"Name","operator":"contains","value":"0"},{"operator":"contains","value":"0","field":"description"}],"logic":"and"}
 Content-Type: {{accept}}
