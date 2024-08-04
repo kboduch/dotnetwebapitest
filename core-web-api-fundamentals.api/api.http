@@ -71,22 +71,35 @@ GET {{baseUrl}}/query/standard
     &f[department][o]=in&f[department][v]=123
     &o[department_name]=desc
     &o[owner_first_name]=asc
-Content-Type: {{accept}}
+Accept: {{accept}}
 
 
 ### Query json tests
 GET {{baseUrl}}/query/json
-    ?foo=bar
-    &baz=1
-    &c[0]=a
-    &c[1]=b
-    &c[3]=c
-    &d[a]=1
-    &d[a]=2
-    &d[b]=1
-    &asFile=true
-    &f[department][o]=in&f[department][v]=123
+    ?f[department][o]=in&f[department][v]=123
     &o[department_name]=desc
     &o[owner_first_name]=asc
-    &filters={"filters":[{"field":"Name","operator":"contains","value":"0"},{"operator":"contains","value":"0","field":"description"}],"logic":"and"}
-Content-Type: {{accept}}
+    &filter={"filters":[{"f":"department","o":"in","v":"123"}],"logic":"and"}
+Accept: {{accept}}
+
+### [Query json tests] example list params
+GET {{baseUrl}}/query/json-example
+Accept: text/plain
+
+### [Query json tests] raw json
+GET {{baseUrl}}/query/json?list_params={"asFile":"csv","order":{"department_name":"asc","owner_last_name":"desc"},"filters":[{"f":"department_name","o":"in","v":["ą / ? \\ = @","Json & sons"]},{"f":"department_name","o":"eq","v":"just a string"}]}
+Accept: text/plain
+
+### [Query json tests] url encode only "user input"
+# Seems like most reasonable
+GET {{baseUrl}}/query/json?list_params={"asFile":"csv","order":{"department_name":"asc","owner_last_name":"desc"},"filters":[{"f":"department_name","o":"in","v":["%C4%85+%2F+%3F+%5C%5C+%3D+%40","Json+%26+sons"]},{"f":"department_name","o":"eq","v":"just+a+string"}]}
+Accept: text/plain
+
+### [Query json tests] url encode all JSON
+GET {{baseUrl}}/query/json?list_params=%7B%22asFile%22%3A%22csv%22%2C%22order%22%3A%7B%22department_name%22%3A%22asc%22%2C%22owner_last_name%22%3A%22desc%22%7D%2C%22filters%22%3A%5B%7B%22f%22%3A%22department_name%22%2C%22o%22%3A%22in%22%2C%22v%22%3A%5B%22%C4%85+%2F+%3F+%5C%5C+%3D+%40%22%2C%22Json+%26+sons%22%5D%7D%2C%7B%22f%22%3A%22department_name%22%2C%22o%22%3A%22eq%22%2C%22v%22%3A%22just+a+string%22%7D%5D%7D
+Accept: text/plain
+
+### [Query json tests] url encode all JSON
+# it's having hard time with backslash
+GET {{baseUrl}}/query/json?list_params={"test":"%C4%85+%2F+%3F+%5C%5C+%3D+%40"}
+Accept: text/plain

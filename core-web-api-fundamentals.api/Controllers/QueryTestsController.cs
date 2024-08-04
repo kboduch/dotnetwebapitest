@@ -1,7 +1,8 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using core_web_api_fundamentals.api.Controllers.QueryJson;
 using core_web_api_fundamentals.api.Controllers.QueryTests;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace core_web_api_fundamentals.api.Controllers;
 
@@ -28,16 +29,22 @@ public class QueryTestsController : ControllerBase
     public IActionResult QueryValueAsJson()
     {
         var testNull = this.testNull();
-        
-        var filter = Request.Query["filter"].ToString();
-        var filterResult = new RootFilter();
-        
-        if (!string.IsNullOrEmpty(filter))
+
+        var listParams = Request.Query["list_params"].ToString();
+        var listQueryParams = new ListQueryParams();
+
+        if (!string.IsNullOrEmpty(listParams))
         {
-            filterResult = JsonConvert.DeserializeObject<RootFilter>(filter);
+            listQueryParams = WebSerializer.Deserialize<ListQueryParams>(listParams);
         }
-        
-        return Ok();
+
+        return Ok(WebSerializer.Serialize(listQueryParams));
+    }
+
+    [HttpGet("json-example")]
+    public IActionResult GetJsonExample()
+    {
+        return Ok(WebSerializer.Serialize(ListQueryParams.Example));
     }
 
     private ActionResult testNull()
